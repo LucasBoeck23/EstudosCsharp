@@ -1,17 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using ApiCatalogo.Validations;
 
 namespace ApiCatalogo.Domain
 {
     [Table("Produtos")]
-    public class Produto
+    public class Produto : IValidatableObject
     {
         [Key]
         public int ProdutoId { get; set; }
 
         [Required(ErrorMessage = "O nome do Produto é obrigatório")]
         [StringLength(20, ErrorMessage ="O Nome deve ser entre 5 e 20 caracteres", MinimumLength = 5)]
+        [PrimeiraLetraMaiuscula]
         public string? Nome { get; set; }
 
         [Required]
@@ -32,5 +34,10 @@ namespace ApiCatalogo.Domain
 
         [JsonIgnore]
         public Categoria? Categoria { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

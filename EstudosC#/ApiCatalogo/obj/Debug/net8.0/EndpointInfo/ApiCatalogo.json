@@ -291,6 +291,7 @@
             "in": "path",
             "required": true,
             "schema": {
+              "minimum": 1,
               "type": "integer",
               "format": "int32"
             }
@@ -429,12 +430,12 @@
             "format": "int32"
           },
           "nome": {
-            "maxLength": 80,
-            "minLength": 0,
+            "maxLength": 20,
+            "minLength": 5,
             "type": "string"
           },
           "descricao": {
-            "maxLength": 300,
+            "maxLength": 30,
             "minLength": 0,
             "type": "string"
           },
@@ -444,7 +445,7 @@
           },
           "imagemUrl": {
             "maxLength": 300,
-            "minLength": 0,
+            "minLength": 10,
             "type": "string"
           },
           "estoque": {
@@ -458,9 +459,6 @@
           "categoriaId": {
             "type": "integer",
             "format": "int32"
-          },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
           }
         },
         "additionalProperties": false

@@ -10,12 +10,12 @@ namespace ApiCatalogo.Domain
         [Key]
         public int ProdutoId { get; set; }
 
-        [Required]
-        [StringLength(80)]
+        [Required(ErrorMessage = "O nome do Produto é obrigatório")]
+        [StringLength(20, ErrorMessage ="O Nome deve ser entre 5 e 20 caracteres", MinimumLength = 5)]
         public string? Nome { get; set; }
 
         [Required]
-        [StringLength(300)]
+        [StringLength(30, ErrorMessage ="A descrição deve ter no maximo {1} caracteres")]
         public string? Descricao { get; set; }
 
         [Required]
@@ -23,7 +23,7 @@ namespace ApiCatalogo.Domain
         public decimal Preco { get; set; }
         
         [Required]
-        [StringLength(300)]
+        [StringLength(300, MinimumLength = 10)]
         public string? ImagemUrl { get; set; }
         public float Estoque { get; set; }
         public DateTime DataCadastro { get; set; }

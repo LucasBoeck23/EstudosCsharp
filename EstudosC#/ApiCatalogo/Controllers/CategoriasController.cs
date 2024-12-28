@@ -1,5 +1,6 @@
 ﻿using ApiCatalogo.Context;
 using ApiCatalogo.Domain;
+using ApiCatalogo.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +12,29 @@ namespace ApiCatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public CategoriasController(AppDbContext context)
+        private readonly ILogger _logger;
+        public CategoriasController(AppDbContext context, ILogger<CategoriasController> logger)
         {
             _context = context;
+            _logger = logger;
+
         }
 
         [HttpGet("produtos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriaProdutos()
         {
+           
             return _context.Categorias.Include(p=> p.Produtos).ToList();
         }
 
 
         [HttpGet]
+        [ServiceFilter(typeof (ApiLoggingFilter))]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
             try
             {
+              _logger.LogInformation("\n\n========= GetAllCategorias ===============\n");
                 var categorias = _context.Categorias.AsNoTracking().ToList();
                 if (categorias is null)
                 {
@@ -44,9 +51,11 @@ namespace ApiCatalogo.Controllers
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
+
+
         {
-            try 
-	        {	  
+            try
+            {
                 var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
 
                 if (categoria == null)
@@ -54,9 +63,9 @@ namespace ApiCatalogo.Controllers
                     return NotFound("Categoria não encontrado");
                 }
                 return Ok(categoria);
-	        }
-	        catch (global::System.Exception)
-	        {
+            }
+            catch (global::System.Exception)
+            {
 
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Ocorreu um erro ao tratar sua solicitação");
